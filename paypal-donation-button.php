@@ -3,7 +3,7 @@
 Plugin Name: PayPal Donation Button
 Plugin URI: https://wordpress.org/plugins/paypal-donation-button/
 Description: A simple PayPal donation button WordPress plugin.
-Version: 1.0.0
+Version: 1.0.1
 Author: Sayful Islam
 Author URI: http://www.sayful.net
 License: GPLv2 or later
@@ -16,6 +16,7 @@ function paypal_donation_button_activation()
         'paypal_user_id' => get_option('admin_email'), 
         'paypal_button' => 'large', 
       	'currency' => 'USD', 
+      	'target' => '_blank', 
     );
 	if ( get_option( 'paypal_donation_button_options' ) !== false ) {
 		// The option already exists, so we just update it.
@@ -49,7 +50,7 @@ function paypal_donation_button_shortcode() {
 
 	}
 
-	return '<form action="https://www.paypal.com/cgi-bin/webscr" method="post">
+	return '<form  target="'.$options['target'].'" action="https://www.paypal.com/cgi-bin/webscr" method="post">
     			<div class="paypal_donation_button">
 			        <input type="hidden" name="cmd" value="_donations">
 			        <input type="hidden" name="business" value="'.$options['paypal_user_id'].'">
@@ -174,6 +175,25 @@ function paypal_donation_button_currency_callback() {
 }
 
 
+function paypal_donation_button_target_callback() {
+	$options = get_option('paypal_donation_button_options');
+	$target = array(
+		'_blank' => 'Blank',
+		'_self' => 'Self'
+	);
+	?>
+	<select id='target' name='paypal_donation_button_options[target]'>
+		<?php
+			foreach($target as $key => $label) :
+				if( $key == $options['target'] ) { $selected = "selected='selected'"; } else { $selected = ''; }
+				echo "<option {$selected} value='{$key}'>{$label}</option>";
+			endforeach;
+		?>
+	</select>
+	<p class="description"><?php _e('Select "Blank" to open the PayPal window in a new window or tab (this is default). Selcet "Self" to open the PayPal window in the same frame as it was clicked.') ?></p>
+	<?php
+}
+
 
 // Register All Settings And And Setting Fields as Used in wordpress
 function paypal_donation_button_settings_and_fields() {
@@ -220,6 +240,16 @@ function paypal_donation_button_settings_and_fields() {
 		__FILE__, 
 		'donate_plugin_main_section',
 		array( 'label_for' => 'currency' )
+	);
+
+	// $id, $title, $callback, $page, $section, $args
+	add_settings_field(
+		'target', 
+		__('Open PayPal:'), 
+		'paypal_donation_button_target_callback', 
+		__FILE__, 
+		'donate_plugin_main_section',
+		array( 'label_for' => 'target' )
 	);
 }
 

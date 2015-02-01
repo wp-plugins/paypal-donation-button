@@ -3,7 +3,7 @@ Contributors: sayful
 Tags: PayPal, Donation, Donate, PayPal Donate,
 Requires at least: 3.0
 Tested up to: 4.1
-Stable tag: 1.0.0
+Stable tag: 1.0.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -59,8 +59,10 @@ Do you have questions or issues with PayPal Donation Button? [Ask for support he
 
 == Changelog ==
 
+= 1.0.1 =
+* Added new option to open PayPal window in the same frame or new tab or window.
 
-= 1.0 =
+= 1.0.0 =
 * Utilizing basic functionality
 
 == Upgrade Notice ==
